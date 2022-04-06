@@ -134,6 +134,18 @@ Kita akses halaman /checkout dengan token yang benar. Kita akan mendapatkan teks
 
 ![Middleware Berhasil](./img/middleware_berhasil.png)
 
+## TIPS
+### Mengaktifkan lebih dari satu middleware pada suatu halaman
+Kita dapat mengaktifkan lebih dari satu middleware pada suatu halaman dengan mengganti parameter dari fungsi middleware(string) menjadi middleware(string[]).
+Misalnya kita ingin mengaktifkan middleware has-auth-token dan active-account di halaman /profile dan /checkout. 
+Maka kita dapat menuliskan kode di route.php seperti di bawah ini.
+```php
+Route::middleware(['has-auth-token', 'active-account'])->group(function() {
+    Route::get('/profile', function () { return "Profile"; });
+    Route::get('/checkout', function () { return "Berhasil"; });
+});
+```
+
 ## Kesimpulan
 
 Laravel Middleware berfungsi sebagai filter request dari pengguna yang akan dicek kelayakannya.
