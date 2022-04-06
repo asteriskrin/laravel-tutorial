@@ -169,7 +169,7 @@ Sekarang kita coba memanggil command `php artisan serve`. Maka tampilannya akan 
 
 #### Langkah Keempat
 
-Sekarang kita akan membuat redirect dari “/employee” menuju route “/pegawa”. Untuk melakukan hal ini, kembali ke file `routes\web.php`. Di sini, kita akan menggunakan method `redirect` yang mengambil dua parameter, yakni URI asal dan URI tujuan.
+Sekarang kita akan membuat redirect dari “/employee” menuju route “/pegawai”. Untuk melakukan hal ini, kembali ke file `routes\web.php`. Di sini, kita akan menggunakan method `redirect` yang mengambil dua parameter, yakni URI asal dan URI tujuan.
 
 ```
 Route::redirect("/employee", "/pegawai");
