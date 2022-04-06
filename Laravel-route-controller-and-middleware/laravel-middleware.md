@@ -7,129 +7,133 @@
 -   [Laravel Middleware](#laravel-middleware)
     -   [Daftar Isi](#daftar-isi)
     -   [Latar Belakang Topik](#latar-belakang-topik)
-    -   [Konsep-Konsep](#konsep-konsep)
-    -   [Langkah-Langkah Tutorial](#langkah-langkah-tutorial)
-        -   [Langkah Pertama](#langkah-pertama)
-        -   [Langkah Kedua](#langkah-kedua)
-        -   [Langkah Ketiga](#langkah-ketiga)
-        -   [Langkah Keempat](#langkah-keempat)
-        -   [Langkah Kelima](#langkah-kelima)
+    -   [Konsep](#konsep)
+        -   [Apa itu Middleware?](#apa-itu-middleware?)
+    -   [Tutorial](#tutorial)
+        -   [Langkah 1 - Buat Middleware](#buat-middleware)
+        -   [Langkah 2 - Coding Middleware](#coding-middleware)
+        -   [Langkah 3 - Aktifkan Middleware](#aktifkan-middleware)
+        -   [Langkah 4 - Tes Middleware](#tes-middleware)
     -   [Kesimpulan](#kesimpulan)
 
 ## Latar Belakang Topik
 
-Dalam mengakses route, terkadang kita perlu mengecek kembali kriteria akses. Misal, sebuah web memiliki route untuk anggota dan route untuk umum. Tentu, tidak mungkin orang umum diperbolehkan mengakses route yang dimiliki anggota karena bisa jadi orang luar akan mengambil data-data pribadi maupun masalah keamanan lainnya. Karena itu, diperlukan semacam pengecekan sebelum diberikan akses request terhadap route yang disebut middleware.
+Kadang-kadang kita perlu mengecek permission ketika user mengakses halaman website kita.
+Misalnya kita mempunyai website Online Shop.
+Di website ini, user yang belum login tidak boleh mengakses halaman http://localhost/checkout karena ada aturan bisnis yang menyatakan bahwa user harus login sebelum membeli barang.
+Untuk membuat fitur ini, kita dapat menggunakan middleware.
+Di materi ini, kita akan mengimplementasikan middleware dengan berbagai macam contoh.
+
+## Konsep
+
+### Apa itu Middleware?
+
+"Middleware adalah mekanisme penyaringan request"
+
+Berikut ini ilustrasi middleware di Laravel. 
+Di gambar ini, aplikasi diibaratkan sebuah bola dan middleware diibaratkan sebuah lapisan di bola yang melindungi lapisan di dalamnya. 
+Ketika user mengakses halaman website, user mengirimkan request melalui browser.
+Request-nya akan melewati lapisan terluar dari bola (middleware).
+Middleware dapat menentukan apakah request-nya layak diteruskan ke dalam bola atau tidak.
 
 ![Middleware](./img/middleware.png)
 
-Dalam kesempatan kali ini, kita mencoba menggunakan route sebagai semacam link coming soon. Kita tidak dapat mengakses sebuah route jika tanggalnya kurang dari 27 Mei 2021. Nantinya, pengguna akan diarahkan ke laman named route “view” jika tidak sesuai.
+Berikut ini meme yang relevan.
 
-Banyaknya fitur tersebut lah yang akan kita pelajari pada konsep Laravel Middleware.
+![Meme Middleware](./img/meme.png)
 
-## Konsep-Konsep
+## Tutorial
 
-Konsep dari Laravel Middleware ini adalah dengan memberikan semacam pengecekan tengah sebelum request diteruskan ke aplikasi. Misal penggunaanya dalam membagi user dan public. Semisal kita membangun aplikasi yang bisa membuat blog, tentu tidak mungkin jika public diberikan kesempatan untuk membuat blog juga. Namun, public cukup diberikan kesempatan untuk membaca isi dari blog tersebut. Untuk melakukannya, sebelum mengakses route untuk membuat blog, user akan diarahkan untuk dicek apakah ia merupakan user atau tidak. Jika iya, maka pengguna dapat mengakses konten blog.
+### 1. Buat Middleware
 
-## Langkah-Langkah Tutorial
+Kita beri nama Middleware yang akan kita buat dengan "HasAuthToken". 
+Buka terminal kemudian masuk ke root folder laravel. 
+Ketik command di bawah ini.
 
-### Langkah Pertama
+```bash
+php artisan make:middleware HasAuthToken
+```
 
-Untuk membuat middleware, pertama kita perlu membuat route yang ingin dipakaikan middleware. Pada contoh ini, kita membuat named route “view” sebagai redirect middleware dan route dengan prefix “/pegawai” sebagai route yang akan kita pakaikan middleware.
+![Command Pembuatan Middleware](./img/php_artisan_make_middleware.png)
 
-Pada file `routes\web.php`, kita melakukan koding route “/view” dengan diakhiri dengan method `name` untuk memberikan nama.
+Setelah command di atas dijalankan. Kita dapat melihat bahwa sebuah file yang bernama HasAuthToken.php muncul di folder /app/Http/Middleware.
+Kemudian, kita harus memberitahu Laravel bahwa ada middleware baru.
+Caranya adalah kita buka file /app/Http/Kernel.php.
+Di dalam file tersebut, cari variabel array $routeMiddleware kemudian tambahkan middleware HasAuthToken.
+```php
+    protected $routeMiddleware = [
+        ...
+        'has-auth-token' => \App\Http\Middleware\HasAuthToken::class,
+    ];
+```
+
+### 2. Coding Middleware
+
+Middleware yang telah kita buat belum melakukan apa-apa. 
+Kita buka file /app/Http/Middleware/HasAuthToken.php kemudian kita implementasi kode seperti pada meme sebelumnya.
 
 ```php
-Route::get("/view", function () {
-    return "Warga Laravel.";
-})->name("view");
-```
-
-Pada file yang sama pula, kita juga menambahkan prefix “/pegawai” dan kita gabungkan dalam group seperti pada tutorial [Laravel Route dengan Parameter](../laravel-route-dengan-parameter).
-
-```php
-Route::prefix("/pegawai")->group(function () {
-    Route::get("/view", function () {
-        return "Pegawai Laravel.";
-    });
-    Route::get("/{id}", function ($id) {
-        return "Pegawai dengan id: " . $id . ".";
-    })->whereNumber('id');
-});
-```
-
-### Langkah Kedua
-
-Jalankan command berikut untuk membuat file middleware baru.
-
-```
-php artisan make:middleware EnsureDateIsRight
-```
-
-Nantinya pada directory `App\Http\Middleware`, kita dapat melihat file `EnsureDateIsRight.php`
-
-![Lokasi Directory Middleware](./img/middleware-1.png)
-
-### Langkah Ketiga
-
-Selanjutnya, pada file `App\Http\Middleware\EnsureDateIsRight.php`, kita dapat menambahkan pada fungsi handle sebagai berikut.
-
-```php
-public function handle(Request $request, Closure $next)
+class HasAuthToken
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
     {
-        $date_now = new DateTime();
-        $date_target = new DateTime("27-05-2021");
-        if ($date_now < $date_target) {
-            return redirect()->route("view");
+        if ($request->input('token') !== 'dd20034901ef1d6fa406daa172ababa1') {
+            return redirect("home");
         }
         return $next($request);
     }
+}
 ```
 
-Di sini, dapat dilihat, jika tanggal kurang dari 27-05-2021, maka middleware akan mengarahkan route kita kepada named route “view”.
+### 3. Aktifkan Middleware
 
-![Middleware EnsureDateIsRight](./img/middleware-2.png)
+Kita perlu mengaktifkan middleware di halaman website kita. 
+Misalnya, kita mempunyai halaman /checkout.
+Kita buka /routes/web.php dan tambahkan middleware di halaman /checkout.
 
-### Langkah Keempat
-
-Untuk memberikan nama terhadap middleware kita, buka file `App\Http\Kernel.php`, di sini pada state `$routeMiddleware` tambahkan kode berikut.
-
+Ada beberapa cara untuk mengaktifkan middleware.
+#### Cara 1: Untuk satu URL
+Misalnya kita ingin middleware HasAuthToken aktif di halaman /checkout saja.
+Kita dapat menuliskan kode seperti di bawah ini.
 ```php
-'date' => \App\Http\Middleware\EnsureDateIsRight::class,
+Route::get('/checkout', function () {
+    return "Berhasil";
+})->middleware('has-auth-token');
 ```
-
-Di sini, kita akan membuat alias nama middleware pada kelas EnsureDateIsRight menjadi “date”.
-
-### Langkah Kelima
-
-Sekarang kita ubah prefix “/pegawai” tadi menjadi berikut.
-
+#### Cara 2: Untuk lebih dari satu URL
+Misalnya kita ingin middleware HasAuthToken aktif di halaman /profile dan /checkout.
+Kita dapat menuliskan kode seperti di bawah ini.
 ```php
-Route::middleware('date')->prefix("/pegawai")->group(function () {
-    Route::get("/view", function () {
-        return "Pegawai Laravel.";
-    });
-    Route::get("/{id}", function ($id) {
-        return "Pegawai dengan id: " . $id . ".";
-    })->whereNumber('id');
+Route::middleware('has-auth-token')->group(function() {
+    Route::get('/profile', function () { return "Profile"; });
+    Route::get('/checkout', function () { return "Profile"; });
 });
 ```
-
-Hal tersebut berarti kita akan mengarahkan keseluruhan prefix “/pegawai” untuk menjalankan middleware “date”.
-
-Sekarang, jika kita mencoba menjalankan Laravel, maka jika kita mencoba mengakses “/pegawai/{id}”.
-
-![Akses Middleware Berhasil](./img/middleware-3.png)
-
-Sekarang kita coba ubah kodingan $date_target pada file `App\Http\Middleware\EnsureDateIsRight.php` menjadi berikut.
-
+#### Cara 3: Untuk semua URL
+Kita buka Kernel.php kemudian tambahkan middleware di variabel array $middleware.
 ```php
-$date_target = new DateTime("28-05-2021");
+protected $middleware = [
+    ...,
+    \App\Http\Middleware\HasAuthToken::class,
+];
 ```
 
-Maka, jika kita mengakses “/pegawai/{id}”, kita akan diarahkan ke named route “view” karena tanggal ternyata belum 28-05-2021.
+### 4. Tes Middleware
+Kita akses halaman /checkout tanpa token atau dengan token yang salah. Kemudian, kita akan dialihkan ke halaman /home oleh Middleware.
 
-![Akses Middleware Gagal](./img/middleware-4.png)
+![Middleware Gagal](./img/middleware_gagal.png)
+
+Kita akses halaman /checkout dengan token yang benar. Kita akan mendapatkan teks "Berhasil".
+
+![Middleware Berhasil](./img/middleware_berhasil.png)
 
 ## Kesimpulan
 
-Laravel Middleware berfungsi sebagai gate untuk menghubungkan request dari pengguna yang nantinya akan ditentukan apakah pengguna pantas untuk mengakses route yang diminta atau tidak.
+Laravel Middleware berfungsi sebagai filter request dari pengguna yang akan dicek kelayakannya.
