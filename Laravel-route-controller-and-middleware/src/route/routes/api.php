@@ -45,3 +45,12 @@ Route::post('articles', function(Request $request) {
     ];
     return $response;
 });
+
+Route::get("pegawai", function (Request $request) {
+    return [
+        "url"=>$request->url(),
+        "method"=>$request->method(),
+        "ipAddress"=>$request->ip(),
+        "allQueryString"=>$request->query()
+    ];
+});
