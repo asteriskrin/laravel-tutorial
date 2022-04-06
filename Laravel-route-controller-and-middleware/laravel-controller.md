@@ -2,20 +2,22 @@
 
 ## Daftar Isi
 
--   [Laravel Controller](#laravel-controller)
-    -   [Daftar Isi](#daftar-isi)
-    -   [Latar Belakang Topik](#latar-belakang-topik)
-    -   [Konsep-Konsep](#konsep-konsep)
-    -   [Langkah-Langkah Tutorial](#langkah-langkah-tutorial)
-        -   [Langkah Pertama](#langkah-pertama)
-        -   [Langkah Kedua](#langkah-kedua)
-        -   [Langkah Ketiga](#langkah-ketiga)
+- [Laravel Controller](#laravel-controller)
+  - [Daftar Isi](#daftar-isi)
+  - [Latar Belakang Topik](#latar-belakang-topik)
+  - [Konsep-Konsep](#konsep-konsep)
+  - [Langkah-Langkah Tutorial](#langkah-langkah-tutorial)
+    - [Langkah Pertama](#langkah-pertama)
+    - [Langkah Kedua](#langkah-kedua)
+    - [Langkah Ketiga](#langkah-ketiga)
 
 ## Latar Belakang Topik
 
 Laravel Controller merupakan salah satu bagian dimana seluruh fungsional web dibuat. Pada Controller dilakukan pengaturan untuk mengakses **Model** terkait dengan **Database** dan juga bagaimana mengirimkan datanya ke **View** dalam bentuk response.
 
 ## Konsep-Konsep
+
+Pada tutorial route digunakan closure / fungsi anonim sebagai callback untuk memproses request. Salah satu cara untuk merapikan kode adalah dengan menggunakan kelas controller yang berisi behaviour spesifik. Contohnya adalah membuat `UserController` untuk menangani request yang berkaitan dengan user (create, read, update, delete). Controller disimpan di direktori `app/Http/Controllers`.
 
 Salah satu contoh aktivitas pada controller adalah aktivitas CRUD (Create, Read, Update, Delete).
 

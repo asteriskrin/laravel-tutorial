@@ -4,17 +4,16 @@
 
 ## Daftar Isi
 
-- [Laravel Route Dengan Parameter](#laravel-route-dengan-parameter)
-  - [Daftar Isi](#daftar-isi)
-  - [Latar Belakang Topik](#latar-belakang-topik)
-  - [Konsep-Konsep](#konsep-konsep)
-  - [Langkah-Langkah Tutorial](#langkah-langkah-tutorial)
-    - [Langkah Pertama](#langkah-pertama)
-    - [Langkah Kedua](#langkah-kedua)
-    - [Langkah Kedua - versi 2](#langkah-kedua---versi-2)
-    - [Langkah Ketiga](#langkah-ketiga)
-    - [Langkah Keempat](#langkah-keempat)
-  - [Kesimpulan](#kesimpulan)
+-   [Laravel Route Dengan Parameter](#laravel-route-dengan-parameter)
+    -   [Daftar Isi](#daftar-isi)
+    -   [Latar Belakang Topik](#latar-belakang-topik)
+    -   [Konsep-Konsep](#konsep-konsep)
+    -   [Langkah-Langkah Tutorial](#langkah-langkah-tutorial)
+        -   [Langkah Pertama](#langkah-pertama)
+        -   [Langkah Kedua](#langkah-kedua)
+        -   [Langkah Kedua - versi 2](#langkah-kedua---versi-2)
+        -   [Langkah Ketiga](#langkah-ketiga)
+    -   [Kesimpulan](#kesimpulan)
 
 ## Latar Belakang Topik
 
@@ -118,25 +117,6 @@ Route::prefix("/pegawai")->group(function () {
 
 Selanjutnya, kita tinggal mengakses URI tersebut.
 ![Pegawai Id Group](./img/route-param-5.png)
-
-### Langkah Keempat
-
-Agar server dapat mengakses detail dari request, fungsi callback suatu route harus menerima parameter request dengan tipe Request. Pada contoh di bawah, diambil url, metode HTTP, ip address, dan query string dari request.
-
-```php
-Route::get("pegawai", function (Request $request) {
-    return [
-        "url"=>$request->url(),
-        "method"=>$request->method(),
-        "ipAddress"=>$request->ip(),
-        "allQueryString"=>$request->query()
-    ];
-});
-```
-
-Response setelah dilakukan `GET` pada route `pegawai` adalah sebagai berikut.
-
-![API Get Pegawa Response](./img/route-basic/api-get-pegawai-response.png)
 
 ## Kesimpulan
 
