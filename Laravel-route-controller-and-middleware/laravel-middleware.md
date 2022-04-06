@@ -146,6 +146,7 @@ Route::middleware(['has-auth-token', 'active-account'])->group(function() {
     Route::get('/checkout', function () { return "Berhasil"; });
 });
 ```
+Middleware has-auth-token akan dijalankan terlebih dahulu. Jika request lolos, maka middleware active-account akan dijalankan. Isi array of middleware berpengaruh pada urutan dieksekusinya middleware. Dalam kata lain, urutan middleware di array adalah urutan lapisan dari terluar menuju ke terdalam.
 
 ## Kesimpulan
 
