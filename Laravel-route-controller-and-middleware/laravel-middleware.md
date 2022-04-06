@@ -14,6 +14,7 @@
         -   [Langkah 2 - Coding Middleware](#coding-middleware)
         -   [Langkah 3 - Aktifkan Middleware](#aktifkan-middleware)
         -   [Langkah 4 - Tes Middleware](#tes-middleware)
+    -   [TIPS](#tips)
     -   [Kesimpulan](#kesimpulan)
 
 ## Latar Belakang Topik
